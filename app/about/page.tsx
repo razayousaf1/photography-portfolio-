@@ -30,11 +30,11 @@ export default async function AboutPage() {
             <AnimatedSection>
               <div className="relative aspect-[4/5] overflow-hidden border border-paper/10 bg-charcoal">
                 <Image
-                  src="https://images.unsplash.com/photo-1554080353-a576cf803bda?auto=format&fit=crop&w=1200&q=80"
+                  src="/s1.jpg"
                   alt="Shammaq Bin Faisal at work behind the camera"
                   fill
                   sizes="(min-width: 1024px) 45vw, 90vw"
-                  className="object-cover"
+                  className="object-cover object-bottom"
                 />
               </div>
             </AnimatedSection>
