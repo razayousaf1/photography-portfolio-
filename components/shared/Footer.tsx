@@ -66,7 +66,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-paper/10 pt-6 text-xs text-smoke sm:flex-row sm:items-center">
-          <p>© {year} Shammaq Bin Faisal. All rights reserved.</p>
+          <p>© {year} Syed Yousaf Raza. All rights reserved.</p>
           <Link href="/login" className="transition-colors hover:text-champagne">
             Owner Login
           </Link>
