@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent, type DragEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ export function UploadForm({ categories }: UploadFormProps) {
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState(categories[0]?.id ?? "");
@@ -31,10 +32,31 @@ export function UploadForm({ categories }: UploadFormProps) {
   const [error, setError] = useState<string | null>(null);
 
   function handleFileChange(selected: File | null) {
+    if (selected && !selected.type.startsWith("image/")) {
+      setError("Please choose an image file.");
+      return;
+    }
     setFile(selected);
     setError(null);
     if (preview) URL.revokeObjectURL(preview);
     setPreview(selected ? URL.createObjectURL(selected) : null);
+  }
+
+  function handleDragOver(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDragging(true);
+  }
+
+  function handleDragLeave(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDragging(false);
+  }
+
+  function handleDrop(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDragging(false);
+    const dropped = e.dataTransfer.files?.[0];
+    if (dropped) handleFileChange(dropped);
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -57,13 +79,10 @@ export function UploadForm({ categories }: UploadFormProps) {
     try {
       setStep("uploading");
 
-      // 1. Get a short-lived signed payload from our server (keeps the
-      //    Cloudinary API secret off the client).
       const signResponse = await fetch("/api/cloudinary-sign", { method: "POST" });
       if (!signResponse.ok) throw new Error("Could not prepare the upload.");
       const signPayload = await signResponse.json();
 
-      // 2. Upload the file directly to Cloudinary from the browser.
       const cloudinaryForm = new FormData();
       cloudinaryForm.append("file", file);
       cloudinaryForm.append("api_key", signPayload.apiKey);
@@ -82,7 +101,6 @@ export function UploadForm({ categories }: UploadFormProps) {
 
       const cloudinaryData = await cloudinaryResponse.json();
 
-      // 3. Save the resulting URL + metadata to Supabase via our API route.
       setStep("saving");
       const saveResponse = await fetch("/api/upload", {
         method: "POST",
@@ -127,10 +145,18 @@ export function UploadForm({ categories }: UploadFormProps) {
     <form onSubmit={handleSubmit} className="space-y-8" noValidate>
       <div>
         <Label>Photo</Label>
-        <button
-          type="button"
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className="flex aspect-video w-full flex-col items-center justify-center gap-2 border border-dashed border-paper/25 bg-charcoal/40 transition-colors hover:border-champagne"
+          role="button"
+          tabIndex={0}
+          className={`flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-2 border border-dashed transition-colors ${
+            isDragging
+              ? "border-champagne bg-champagne/10"
+              : "border-paper/25 bg-charcoal/40 hover:border-champagne"
+          }`}
         >
           {preview ? (
             <div className="relative h-full w-full">
@@ -139,10 +165,12 @@ export function UploadForm({ categories }: UploadFormProps) {
           ) : (
             <>
               <UploadCloud className="text-champagne" size={28} />
-              <p className="text-sm text-smoke">Click to choose an image</p>
+              <p className="text-sm text-smoke">
+                {isDragging ? "Drop the photo here" : "Drag and drop an image, or click to choose"}
+              </p>
             </>
           )}
-        </button>
+        </div>
         <input
           ref={fileInputRef}
           type="file"
