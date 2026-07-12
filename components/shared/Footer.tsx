@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Instagram, Mail, Phone } from "lucide-react";
 
 export function Footer() {
@@ -9,9 +10,14 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-display text-xl text-paper">
-              Shammaq <span className="italic text-champagne">Bin Faisal</span>
-            </p>
+            <Image
+              src="/logo1.svg"
+              alt="Shammaq Bin Faisal"
+              width={180}
+              height={40}
+              unoptimized
+              className="h-12 w-auto sm:h-14"
+            />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-smoke">
               Photography shot with intent — fashion, product, corporate, weddings,
               and commercial work, framed for people who notice detail.
