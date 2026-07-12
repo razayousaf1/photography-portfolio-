@@ -51,3 +51,13 @@ export const uploadPhotoSchema = z.object({
 });
 
 export type UploadPhotoValues = z.infer<typeof uploadPhotoSchema>;
+
+export const categoryFormSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Category name must be at least 2 characters.")
+    .max(60, "Keep it under 60 characters."),
+});
+
+export type CategoryFormValues = z.infer<typeof categoryFormSchema>;

@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, UploadCloud, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, UploadCloud, MessagesSquare, Layers, LogOut, ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
 const LINKS = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/inquiries", label: "Inquiries", icon: MessagesSquare },
+  { href: "/admin/categories", label: "Categories", icon: Layers },
   { href: "/admin/upload", label: "Upload Photo", icon: UploadCloud },
 ];
 

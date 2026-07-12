@@ -50,8 +50,7 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="mt-6 max-w-lg text-balance text-base leading-relaxed text-smoke sm:text-lg"
         >
-          Shammaq Bin Faisal is a photographer working between Lahore and the
-          rest of the world — building images that hold their nerve.
+          Shammaq Films is a creative visual agency capturing stories through premium photography and cinematic filmmaking. We create timeless imagery for weddings, brands, and businesses, blending artistic vision to deliver visuals that leave a lasting impression.
         </motion.p>
 
         <motion.div
@@ -62,13 +61,13 @@ export function Hero() {
         >
           <Link
             href="/book-now"
-            className="border border-champagne bg-champagne px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-ink transition-colors hover:bg-champagne-light"
+            className="rounded-full border border-champagne bg-champagne px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-ink transition-colors hover:bg-champagne-light"
           >
             Book a Session
           </Link>
           <Link
             href="#categories"
-            className="border border-paper/30 px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-paper transition-colors hover:border-champagne hover:text-champagne"
+            className="rounded-full border border-paper/30 px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-paper transition-colors hover:border-champagne hover:text-champagne"
           >
             View Portfolio
           </Link>
