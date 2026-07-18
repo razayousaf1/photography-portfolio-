@@ -10,18 +10,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0b0b0c",
-        paper: "#f6f4ef",
-        charcoal: "#17171a",
-        smoke: "#8b8880",
+        ink: "#0a0a0a",
+        paper: "#f3ebe7",
+        charcoal: "#1a1214",
+        smoke: "#a89a9d",
         champagne: {
-          DEFAULT: "#c9a869",
-          light: "#e8d5a0",
-          dim: "#9c8452",
+          DEFAULT: "#c77d74",
+          light: "#d79d95",
+          dim: "#8f2f42",
+        },
+        burgundy: {
+          DEFAULT: "#5c1230",
+          dark: "#2b0010",
+          mid: "#8f2f42",
+          dusty: "#c77d74",
         },
       },
       fontFamily: {
-        display: ["var(--font-fraunces)", "serif"],
+        display: ["var(--font-cormorant)", "serif"],
         body: ["var(--font-inter)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },

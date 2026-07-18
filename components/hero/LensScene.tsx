@@ -5,8 +5,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 const BLADE_COUNT = 9;
-const CHAMPAGNE = "#c9a869";
-const CHAMPAGNE_LIGHT = "#e8d5a0";
+const CHAMPAGNE = "#8f2f42";
+const CHAMPAGNE_LIGHT = "#a8465a";
 
 function bladeShape(): THREE.Shape {
   const shape = new THREE.Shape();

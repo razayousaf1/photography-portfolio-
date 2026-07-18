@@ -20,7 +20,7 @@ const LensScene = dynamic(
 export function Hero() {
   return (
     <section className="relative flex h-[100vh] min-h-[640px] w-full items-center justify-center overflow-hidden bg-ink">
-      <div className="pointer-events-none absolute inset-0 bg-champagne-radial opacity-60" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-burgundy-dark via-burgundy/30 to-transparent opacity-90" />
       <LensScene />
 
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
@@ -61,13 +61,13 @@ export function Hero() {
         >
           <Link
             href="/book-now"
-            className="rounded-full border border-champagne bg-champagne px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-ink transition-colors hover:bg-champagne-light"
+            className="rounded-xl border border-champagne bg-champagne px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-ink transition-colors hover:bg-champagne-light"
           >
             Book a Session
           </Link>
           <Link
             href="#categories"
-            className="rounded-full border border-paper/30 px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-paper transition-colors hover:border-champagne hover:text-champagne"
+            className="rounded-xl border border-burgundy bg-burgundy px-8 py-4 font-mono text-xs uppercase tracking-widest2 text-paper transition-colors hover:bg-burgundy-mid"
           >
             View Portfolio
           </Link>

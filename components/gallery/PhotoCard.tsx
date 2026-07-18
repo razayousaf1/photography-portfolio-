@@ -18,7 +18,7 @@ export function PhotoCard({
     <button
       type="button"
       onClick={onClick}
-      className="group relative block w-full overflow-hidden border border-paper/10 bg-charcoal text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
+      className="group relative block w-full overflow-hidden rounded-xl border-2 border-burgundy bg-charcoal text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne"
     >
       <div className="relative aspect-[3/4] w-full">
         <Image

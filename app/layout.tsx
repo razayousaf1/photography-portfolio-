@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Montserrat, JetBrains_Mono } from "next/font/google";
+import { Cormorant_Garamond, Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const montserrat = Montserrat({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  variable: "--font-fraunces",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -59,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${mono.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${mono.variable}`}>
       <body>
         <div className="grain-overlay" aria-hidden="true" />
         {children}

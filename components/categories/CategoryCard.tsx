@@ -46,7 +46,7 @@ export function CategoryCard({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={style}
-        className="tilt-card group-hover:champagne-glow relative aspect-[4/5] overflow-hidden border border-paper/10 bg-charcoal transition-shadow duration-500"
+        className="tilt-card group-hover:champagne-glow relative aspect-[4/5] overflow-hidden rounded-xl border-2 border-burgundy bg-charcoal transition-shadow duration-500"
       >
         <div className="pointer-events-none absolute inset-0 z-10 border border-transparent transition-colors duration-500 group-hover:border-champagne/70" />
 

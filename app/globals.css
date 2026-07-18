@@ -16,8 +16,8 @@
   }
 
   ::selection {
-    background-color: theme("colors.champagne.DEFAULT");
-    color: theme("colors.ink");
+    background-color: theme("colors.burgundy.DEFAULT");
+    color: theme("colors.paper");
   }
 
   :focus-visible {
@@ -46,7 +46,7 @@
   }
 
   .champagne-glow {
-    box-shadow: 0 0 0 1px rgba(201, 168, 105, 0.5), 0 20px 60px -20px rgba(201, 168, 105, 0.35);
+    box-shadow: 0 0 0 1px rgba(199, 125, 116, 0.5), 0 20px 60px -20px rgba(199, 125, 116, 0.35);
   }
 
   .mask-fade-b {
