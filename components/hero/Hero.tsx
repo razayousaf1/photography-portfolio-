@@ -1,27 +1,14 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
-const LensScene = dynamic(
-  () => import("./LensScene").then((mod) => mod.LensScene),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="h-64 w-64 animate-pulse rounded-full border border-champagne/20" />
-      </div>
-    ),
-  }
-);
 
 export function Hero() {
   return (
     <section className="relative flex h-[100vh] min-h-[640px] w-full items-center justify-center overflow-hidden bg-ink">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-burgundy-dark via-burgundy/30 to-transparent opacity-90" />
-      <LensScene />
 
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
         <motion.p

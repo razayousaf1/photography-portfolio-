@@ -71,6 +71,23 @@ function ApertureBlades({ openness }: { openness: number }) {
   );
 }
 
+function ApertureGlow() {
+  return (
+    <group position={[0, 0, -0.3]}>
+      {/* Soft outer falloff */}
+      <mesh>
+        <circleGeometry args={[1.6, 64]} />
+        <meshBasicMaterial color={CHAMPAGNE} transparent opacity={0.25} />
+      </mesh>
+      {/* Brighter core */}
+      <mesh position={[0, 0, 0.05]}>
+        <circleGeometry args={[0.9, 64]} />
+        <meshBasicMaterial color={CHAMPAGNE_LIGHT} transparent opacity={0.6} />
+      </mesh>
+    </group>
+  );
+}
+
 function LensBarrel() {
   return (
     <group>
@@ -118,10 +135,12 @@ function Scene() {
   return (
     <group rotation={[0.5, 0, 0]}>
       <LensBarrel />
+      <ApertureGlow />
       <ApertureBlades openness={openness} />
       <ambientLight intensity={0.35} />
       <pointLight position={[6, 6, 8]} intensity={45} color={CHAMPAGNE_LIGHT} />
       <pointLight position={[-6, -4, 4]} intensity={20} color="#ffffff" />
+      <pointLight position={[0, 0, 1]} intensity={15} color={CHAMPAGNE_LIGHT} />
     </group>
   );
 }
