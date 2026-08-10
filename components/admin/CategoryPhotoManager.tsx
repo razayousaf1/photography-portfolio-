@@ -60,7 +60,10 @@ export function CategoryPhotoManager({ category, photos: initial }: CategoryPhot
           orderedIds: reordered.map((p) => p.id),
         }),
       });
-      if (!response.ok) throw new Error("Could not save the new order.");
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.error ?? `Could not save the new order (status ${response.status}).`);
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Reorder failed.");
       router.refresh();
