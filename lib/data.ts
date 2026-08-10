@@ -14,11 +14,11 @@ import type { Category, CategorySummary, Photo, PhotoWithCategory } from "@/lib/
  */
 
 export const DUMMY_CATEGORIES: Category[] = [
-  { id: "cat-fashion", name: "Fashion", slug: "fashion", created_at: "2026-01-01T00:00:00Z" },
-  { id: "cat-product", name: "Product", slug: "product", created_at: "2026-01-01T00:00:00Z" },
-  { id: "cat-corporate", name: "Corporate", slug: "corporate", created_at: "2026-01-01T00:00:00Z" },
-  { id: "cat-weddings", name: "Weddings", slug: "weddings", created_at: "2026-01-01T00:00:00Z" },
-  { id: "cat-commercial", name: "Commercial", slug: "commercial", created_at: "2026-01-01T00:00:00Z" },
+  { id: "cat-fashion", name: "Fashion", slug: "fashion", created_at: "2026-01-01T00:00:00Z", sort_order: 0, cover_photo_id: null },
+  { id: "cat-product", name: "Product", slug: "product", created_at: "2026-01-01T00:00:00Z", sort_order: 1, cover_photo_id: null },
+  { id: "cat-corporate", name: "Corporate", slug: "corporate", created_at: "2026-01-01T00:00:00Z", sort_order: 2, cover_photo_id: null },
+  { id: "cat-weddings", name: "Weddings", slug: "weddings", created_at: "2026-01-01T00:00:00Z", sort_order: 3, cover_photo_id: null },
+  { id: "cat-commercial", name: "Commercial", slug: "commercial", created_at: "2026-01-01T00:00:00Z", sort_order: 4, cover_photo_id: null },
 ];
 
 const IMG = (id: string, w = 1600) =>
@@ -71,6 +71,7 @@ function buildDummyPhotos(): PhotoWithCategory[] {
       cloudinary_public_id: `demo/${seed.id}`,
       is_featured: Boolean(seed.featured),
       is_public: true,
+      sort_order: index,
       uploaded_by: null,
       created_at: now,
       updated_at: now,
@@ -97,7 +98,7 @@ export async function getCategories(): Promise<Category[]> {
     const { data, error } = await supabase
       .from("categories")
       .select("*")
-      .order("name", { ascending: true });
+      .order("sort_order", { ascending: true });
 
     if (error || !data) return DUMMY_CATEGORIES;
     return data;
@@ -113,7 +114,11 @@ export async function getCategorySummaries(): Promise<CategorySummary[]> {
 
   return categories.map((category) => {
     const categoryPhotos = photos.filter((p) => p.category_id === category.id);
+    const manualCover = category.cover_photo_id
+      ? categoryPhotos.find((p) => p.id === category.cover_photo_id)?.cloudinary_url
+      : null;
     const cover =
+      manualCover ??
       categoryPhotos.find((p) => p.is_featured)?.cloudinary_url ??
       categoryPhotos[0]?.cloudinary_url ??
       null;
@@ -136,7 +141,7 @@ export async function getPublicPhotos(): Promise<PhotoWithCategory[]> {
       .from("photos")
       .select("*, category:categories(id, name, slug)")
       .eq("is_public", true)
-      .order("created_at", { ascending: false });
+      .order("sort_order", { ascending: true });
 
     if (error || !data) return DUMMY_PHOTOS;
     return data as unknown as PhotoWithCategory[];
@@ -180,6 +185,27 @@ export async function getAllPhotosForAdmin(): Promise<PhotoWithCategory[]> {
     return data as unknown as PhotoWithCategory[];
   } catch {
     return DUMMY_PHOTOS;
+  }
+}
+
+/** All photos in one category (public or hidden) for the owner's photo manager. */
+export async function getPhotosForCategoryAdmin(categoryId: string): Promise<PhotoWithCategory[]> {
+  if (!isSupabaseConfigured()) {
+    return DUMMY_PHOTOS.filter((p) => p.category_id === categoryId);
+  }
+
+  try {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from("photos")
+      .select("*, category:categories(id, name, slug)")
+      .eq("category_id", categoryId)
+      .order("sort_order", { ascending: true });
+
+    if (error || !data) return [];
+    return data as unknown as PhotoWithCategory[];
+  } catch {
+    return [];
   }
 }
 

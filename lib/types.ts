@@ -3,6 +3,8 @@ export interface Category {
   name: string;
   slug: string;
   created_at: string;
+  sort_order: number;
+  cover_photo_id: string | null;
 }
 
 export interface Photo {
@@ -14,6 +16,7 @@ export interface Photo {
   cloudinary_public_id: string;
   is_featured: boolean;
   is_public: boolean;
+  sort_order: number;
   uploaded_by: string | null;
   created_at: string;
   updated_at: string;

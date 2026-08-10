@@ -12,7 +12,7 @@ export function CategoryGrid({ categories }: { categories: CategorySummary[] }) 
               Portfolio
             </p>
             <h2 className="mt-3 font-display text-3xl text-paper sm:text-5xl">
-              Five bodies of work.
+              Bodies of work.
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-relaxed text-smoke">

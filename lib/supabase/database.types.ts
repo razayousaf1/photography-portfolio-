@@ -11,18 +11,24 @@ export interface Database {
           name: string;
           slug: string;
           created_at: string;
+          sort_order: number;
+          cover_photo_id: string | null;
         };
         Insert: {
           id?: string;
           name: string;
           slug: string;
           created_at?: string;
+          sort_order?: number;
+          cover_photo_id?: string | null;
         };
         Update: {
           id?: string;
           name?: string;
           slug?: string;
           created_at?: string;
+          sort_order?: number;
+          cover_photo_id?: string | null;
         };
         Relationships: [];
       };
@@ -37,6 +43,7 @@ export interface Database {
           is_featured: boolean;
           is_public: boolean;
           uploaded_by: string | null;
+          sort_order: number;
           created_at: string;
           updated_at: string;
         };
@@ -50,6 +57,7 @@ export interface Database {
           is_featured?: boolean;
           is_public?: boolean;
           uploaded_by?: string | null;
+          sort_order: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -63,6 +71,7 @@ export interface Database {
           is_featured?: boolean;
           is_public?: boolean;
           uploaded_by?: string | null;
+          sort_order: number;
           created_at?: string;
           updated_at?: string;
         };
