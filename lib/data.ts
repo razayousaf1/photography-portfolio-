@@ -198,7 +198,7 @@ export async function getPhotosForCategoryAdmin(categoryId: string): Promise<Pho
     const supabase = createClient();
     const { data, error } = await supabase
       .from("photos")
-      .select("*, category:categories(id, name, slug)")
+      .select("*, category:categories!photos_category_id_fkey(id, name, slug)")
       .eq("category_id", categoryId)
       .order("sort_order", { ascending: true });
 
