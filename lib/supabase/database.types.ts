@@ -57,7 +57,7 @@ export interface Database {
           is_featured?: boolean;
           is_public?: boolean;
           uploaded_by?: string | null;
-          sort_order: number;
+          sort_order?: number;
           created_at?: string;
           updated_at?: string;
         };
@@ -71,7 +71,7 @@ export interface Database {
           is_featured?: boolean;
           is_public?: boolean;
           uploaded_by?: string | null;
-          sort_order: number;
+          sort_order?: number;
           created_at?: string;
           updated_at?: string;
         };
