@@ -139,7 +139,7 @@ export async function getPublicPhotos(): Promise<PhotoWithCategory[]> {
     const supabase = createClient();
     const { data, error } = await supabase
       .from("photos")
-      .select("*, category:categories(id, name, slug)")
+      .select("*, category:categories!photos_category_id_fkey(id, name, slug)")
       .eq("is_public", true)
       .order("sort_order", { ascending: true });
 
@@ -178,7 +178,7 @@ export async function getAllPhotosForAdmin(): Promise<PhotoWithCategory[]> {
     const supabase = createClient();
     const { data, error } = await supabase
       .from("photos")
-      .select("*, category:categories(id, name, slug)")
+      .select("*, category:categories!photos_category_id_fkey(id, name, slug)")
       .order("created_at", { ascending: false });
 
     if (error || !data) return DUMMY_PHOTOS;
