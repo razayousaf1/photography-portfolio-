@@ -4,10 +4,11 @@ import { createServiceRoleClient } from "@/lib/supabase/server";
 import { z } from "zod";
 
 const heroSettingsSchema = z.object({
-  heroImageUrl: z.string().url().nullable().optional(),
-  heroImagePublicId: z.string().nullable().optional(),
-  heroOpacity: z.number().int().min(0).max(100).optional(),
-});
+    heroImageUrl: z.string().url().nullable().optional(),
+    heroImagePublicId: z.string().nullable().optional(),
+    heroOpacity: z.number().int().min(0).max(100).optional(),
+    heroMode: z.enum(["static", "slideshow"]).optional(),
+  });
 
 export async function PATCH(request: Request) {
   try {
@@ -37,14 +38,16 @@ export async function PATCH(request: Request) {
     const supabase = createServiceRoleClient();
 
     const updatePayload: {
-      hero_image_url?: string | null;
-      hero_image_public_id?: string | null;
-      hero_opacity?: number;
-    } = {};
-    if (result.data.heroImageUrl !== undefined) updatePayload.hero_image_url = result.data.heroImageUrl;
-    if (result.data.heroImagePublicId !== undefined)
-      updatePayload.hero_image_public_id = result.data.heroImagePublicId;
-    if (result.data.heroOpacity !== undefined) updatePayload.hero_opacity = result.data.heroOpacity;
+        hero_image_url?: string | null;
+        hero_image_public_id?: string | null;
+        hero_opacity?: number;
+        hero_mode?: string;
+      } = {};
+      if (result.data.heroImageUrl !== undefined) updatePayload.hero_image_url = result.data.heroImageUrl;
+      if (result.data.heroImagePublicId !== undefined)
+        updatePayload.hero_image_public_id = result.data.heroImagePublicId;
+      if (result.data.heroOpacity !== undefined) updatePayload.hero_opacity = result.data.heroOpacity;
+      if (result.data.heroMode !== undefined) updatePayload.hero_mode = result.data.heroMode;
 
     const { data, error } = await supabase
       .from("site_settings")

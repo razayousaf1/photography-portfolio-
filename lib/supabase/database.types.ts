@@ -1,7 +1,3 @@
-// Hand-written mirror of the Supabase schema (supabase/schema.sql).
-// If you change the schema, run `supabase gen types typescript` to regenerate
-// this file automatically instead of editing it by hand long-term.
-
 export interface Database {
   public: {
     Tables: {
@@ -127,6 +123,7 @@ export interface Database {
           hero_image_url: string | null;
           hero_image_public_id: string | null;
           hero_opacity: number;
+          hero_mode: string;
           updated_at: string;
         };
         Insert: {
@@ -134,6 +131,7 @@ export interface Database {
           hero_image_url?: string | null;
           hero_image_public_id?: string | null;
           hero_opacity?: number;
+          hero_mode?: string;
           updated_at?: string;
         };
         Update: {
@@ -141,7 +139,32 @@ export interface Database {
           hero_image_url?: string | null;
           hero_image_public_id?: string | null;
           hero_opacity?: number;
+          hero_mode?: string;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      hero_images: {
+        Row: {
+          id: string;
+          url: string;
+          public_id: string;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          url: string;
+          public_id: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          url?: string;
+          public_id?: string;
+          sort_order?: number;
+          created_at?: string;
         };
         Relationships: [];
       };

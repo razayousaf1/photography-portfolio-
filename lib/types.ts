@@ -56,7 +56,15 @@ export interface ApiSuccess<T> {
 
 export type ApiResult<T> = ApiSuccess<T> | ApiError;
 
+export interface HeroImage {
+  id: string;
+  url: string;
+  sortOrder: number;
+}
+
 export interface HeroSettings {
+  heroMode: "static" | "slideshow";
   heroImageUrl: string | null;
   heroOpacity: number;
+  heroImages: HeroImage[];
 }

@@ -1,6 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import type { Category, CategorySummary, HeroSettings, Inquiry, Photo, PhotoWithCategory } from "@/lib/types";
+import type { Category, CategorySummary, HeroImage, HeroSettings, Inquiry, Photo, PhotoWithCategory } from "@/lib/types";
 
 /**
  * DUMMY / DEMO DATA
@@ -82,24 +82,38 @@ function buildDummyPhotos(): PhotoWithCategory[] {
   });
 }
 
-const DEFAULT_HERO_SETTINGS: HeroSettings = { heroImageUrl: null, heroOpacity: 100 };
+const DEFAULT_HERO_SETTINGS: HeroSettings = {
+  heroMode: "static",
+  heroImageUrl: null,
+  heroOpacity: 100,
+  heroImages: [],
+};
 
 export async function getHeroSettings(): Promise<HeroSettings> {
   if (!isSupabaseConfigured()) return DEFAULT_HERO_SETTINGS;
 
   try {
     const supabase = createClient();
-    const { data, error } = await supabase
-      .from("site_settings")
-      .select("hero_image_url, hero_opacity")
-      .eq("id", true)
-      .single();
+    const [{ data: settingsData, error: settingsError }, { data: imagesData }] = await Promise.all([
+      supabase
+        .from("site_settings")
+        .select("hero_image_url, hero_opacity, hero_mode")
+        .eq("id", true)
+        .single(),
+      supabase.from("hero_images").select("id, url, sort_order").order("sort_order", { ascending: true }),
+    ]);
 
-    if (error || !data) return DEFAULT_HERO_SETTINGS;
+    if (settingsError || !settingsData) return DEFAULT_HERO_SETTINGS;
 
     return {
-      heroImageUrl: data.hero_image_url,
-      heroOpacity: data.hero_opacity,
+      heroMode: settingsData.hero_mode === "slideshow" ? "slideshow" : "static",
+      heroImageUrl: settingsData.hero_image_url,
+      heroOpacity: settingsData.hero_opacity,
+      heroImages: (imagesData ?? []).map((img) => ({
+        id: img.id,
+        url: img.url,
+        sortOrder: img.sort_order,
+      })),
     };
   } catch {
     return DEFAULT_HERO_SETTINGS;

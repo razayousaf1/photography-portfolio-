@@ -16,7 +16,12 @@ export default async function HomePage() {
     <>
       <Navbar photos={photos} />
       <main>
-      <Hero heroImageUrl={heroSettings.heroImageUrl} heroOpacity={heroSettings.heroOpacity} />
+      <Hero
+          heroMode={heroSettings.heroMode}
+          heroImageUrl={heroSettings.heroImageUrl}
+          heroImages={heroSettings.heroImages}
+          heroOpacity={heroSettings.heroOpacity}
+        />
         <CategoryGrid categories={categories} />
 
         <section className="border-t border-paper/10 bg-charcoal/30 py-24">
