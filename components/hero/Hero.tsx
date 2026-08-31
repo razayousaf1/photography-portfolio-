@@ -1,14 +1,37 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 
-export function Hero() {
+export function Hero({
+  heroImageUrl,
+  heroOpacity,
+}:
+{
+  heroImageUrl: string | null;
+  heroOpacity: number;
+}) 
+{
   return (
     <section className="relative flex h-[100vh] min-h-[640px] w-full items-center justify-center overflow-hidden bg-ink">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-burgundy-dark via-burgundy/30 to-transparent opacity-90" />
+      {heroImageUrl ? (
+        <>
+          <Image
+            src={heroImageUrl}
+            alt=""
+            fill
+            priority
+            className="object-cover"
+            style={{ opacity: heroOpacity / 100 }}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/10" />
+        </>
+      ) : (
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-burgundy-dark via-burgundy/30 to-transparent opacity-90" />
+      )}
 
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
         <motion.p

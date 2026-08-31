@@ -121,6 +121,30 @@ export interface Database {
         };
         Relationships: [];
       };
+      site_settings: {
+        Row: {
+          id: boolean;
+          hero_image_url: string | null;
+          hero_image_public_id: string | null;
+          hero_opacity: number;
+          updated_at: string;
+        };
+        Insert: {
+          id?: boolean;
+          hero_image_url?: string | null;
+          hero_image_public_id?: string | null;
+          hero_opacity?: number;
+          updated_at?: string;
+        };
+        Update: {
+          id?: boolean;
+          hero_image_url?: string | null;
+          hero_image_public_id?: string | null;
+          hero_opacity?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

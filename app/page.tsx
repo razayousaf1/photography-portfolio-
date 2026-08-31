@@ -3,19 +3,20 @@ import { Footer } from "@/components/shared/Footer";
 import { Hero } from "@/components/hero/Hero";
 import { CategoryGrid } from "@/components/categories/CategoryGrid";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
-import { getCategorySummaries, getPublicPhotos } from "@/lib/data";
+import { getCategorySummaries, getPublicPhotos, getHeroSettings } from "@/lib/data";
 
 export default async function HomePage() {
-  const [categories, photos] = await Promise.all([
+  const [categories, photos, heroSettings] = await Promise.all([
     getCategorySummaries(),
     getPublicPhotos(),
+    getHeroSettings(),
   ]);
 
   return (
     <>
       <Navbar photos={photos} />
       <main>
-        <Hero />
+      <Hero heroImageUrl={heroSettings.heroImageUrl} heroOpacity={heroSettings.heroOpacity} />
         <CategoryGrid categories={categories} />
 
         <section className="border-t border-paper/10 bg-charcoal/30 py-24">

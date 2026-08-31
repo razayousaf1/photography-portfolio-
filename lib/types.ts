@@ -55,3 +55,8 @@ export interface ApiSuccess<T> {
 }
 
 export type ApiResult<T> = ApiSuccess<T> | ApiError;
+
+export interface HeroSettings {
+  heroImageUrl: string | null;
+  heroOpacity: number;
+}

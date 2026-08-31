@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, UploadCloud, MessagesSquare, Layers, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, UploadCloud, MessagesSquare, Layers, Image as ImageIcon, LogOut, ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/admin/inquiries", label: "Inquiries", icon: MessagesSquare },
   { href: "/admin/categories", label: "Categories", icon: Layers },
   { href: "/admin/upload", label: "Upload Photo", icon: UploadCloud },
+  { href: "/admin/settings", label: "Site Settings", icon: ImageIcon },
 ];
 
 export function AdminSidebar() {
