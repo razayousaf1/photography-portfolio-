@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type DragEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Star, ArrowUp, ArrowDown, ImageOff } from "lucide-react";
+import { Star, GripVertical, ImageOff } from "lucide-react";
 import type { Category, PhotoWithCategory } from "@/lib/types";
 import { optimizedImageUrl } from "@/lib/cloudinary";
 
@@ -13,11 +13,22 @@ interface CategoryPhotoManagerProps {
   photos: PhotoWithCategory[];
 }
 
+function swapItems<T>(list: T[], indexA: number, indexB: number): T[] {
+  const updated = [...list];
+  const temp = updated[indexA];
+  updated[indexA] = updated[indexB] as T;
+  updated[indexB] = temp as T;
+  return updated;
+}
+
 export function CategoryPhotoManager({ category, photos: initial }: CategoryPhotoManagerProps) {
   const router = useRouter();
   const [photos, setPhotos] = useState(initial);
   const [coverId, setCoverId] = useState(category.cover_photo_id);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [savingOrder, setSavingOrder] = useState(false);
 
   async function setCover(photoId: string) {
     setBusyId(photoId);
@@ -41,23 +52,15 @@ export function CategoryPhotoManager({ category, photos: initial }: CategoryPhot
     }
   }
 
-  async function move(index: number, direction: -1 | 1) {
-    const targetIndex = index + direction;
-    if (targetIndex < 0 || targetIndex >= photos.length) return;
-
-    const reordered = [...photos];
-    const temp = reordered[index]!;
-    reordered[index] = reordered[targetIndex]!;
-    reordered[targetIndex] = temp;
-    setPhotos(reordered);
-
+  async function persistOrder(ordered: PhotoWithCategory[]) {
+    setSavingOrder(true);
     try {
       const response = await fetch("/api/photos/reorder", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           categoryId: category.id,
-          orderedIds: reordered.map((p) => p.id),
+          orderedIds: ordered.map((p) => p.id),
         }),
       });
       if (!response.ok) {
@@ -67,7 +70,49 @@ export function CategoryPhotoManager({ category, photos: initial }: CategoryPhot
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Reorder failed.");
       router.refresh();
+    } finally {
+      setSavingOrder(false);
     }
+  }
+
+  function handleDragStart(e: DragEvent<HTMLDivElement>, photoId: string) {
+    setDraggedId(photoId);
+    e.dataTransfer.effectAllowed = "move";
+  }
+
+  function handleDragOver(e: DragEvent<HTMLDivElement>, photoId: string) {
+    e.preventDefault();
+    if (draggedId && draggedId !== photoId) {
+      setDragOverId(photoId);
+    }
+  }
+
+  function handleDragLeave() {
+    setDragOverId(null);
+  }
+
+  function handleDrop(e: DragEvent<HTMLDivElement>, targetId: string) {
+    e.preventDefault();
+    setDragOverId(null);
+
+    if (!draggedId || draggedId === targetId) {
+      setDraggedId(null);
+      return;
+    }
+
+    const fromIndex = photos.findIndex((p) => p.id === draggedId);
+    const toIndex = photos.findIndex((p) => p.id === targetId);
+    setDraggedId(null);
+    if (fromIndex === -1 || toIndex === -1) return;
+
+    const reordered = swapItems(photos, fromIndex, toIndex);
+    setPhotos(reordered);
+    persistOrder(reordered);
+  }
+
+  function handleDragEnd() {
+    setDraggedId(null);
+    setDragOverId(null);
   }
 
   if (photos.length === 0) {
@@ -81,30 +126,31 @@ export function CategoryPhotoManager({ category, photos: initial }: CategoryPhot
 
   return (
     <div className="space-y-3">
-      {photos.map((photo, index) => (
+      <p className="text-xs text-smoke">
+        Drag any photo by the handle and drop it where you want it — the order
+        saves automatically.
+        {savingOrder && <span className="ml-2 text-champagne">Saving…</span>}
+      </p>
+
+      {photos.map((photo) => (
         <div
           key={photo.id}
-          className="flex items-center gap-4 border border-burgundy bg-charcoal/30 p-3 rounded-xl"
+          draggable
+          onDragStart={(e) => handleDragStart(e, photo.id)}
+          onDragOver={(e) => handleDragOver(e, photo.id)}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, photo.id)}
+          onDragEnd={handleDragEnd}
+          className={`flex items-center gap-4 rounded-xl border bg-charcoal/30 p-3 transition-all ${
+            draggedId === photo.id
+              ? "opacity-40"
+              : dragOverId === photo.id
+                ? "border-champagne bg-champagne/10"
+                : "border-burgundy"
+          }`}
         >
-          <div className="flex flex-col gap-1">
-            <button
-              type="button"
-              disabled={index === 0}
-              onClick={() => move(index, -1)}
-              className="text-smoke transition-colors hover:text-champagne disabled:opacity-20"
-              aria-label="Move up"
-            >
-              <ArrowUp size={14} />
-            </button>
-            <button
-              type="button"
-              disabled={index === photos.length - 1}
-              onClick={() => move(index, 1)}
-              className="text-smoke transition-colors hover:text-champagne disabled:opacity-20"
-              aria-label="Move down"
-            >
-              <ArrowDown size={14} />
-            </button>
+          <div className="cursor-grab text-smoke active:cursor-grabbing" aria-label="Drag to reorder">
+            <GripVertical size={18} />
           </div>
 
           <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl bg-charcoal">
@@ -112,7 +158,8 @@ export function CategoryPhotoManager({ category, photos: initial }: CategoryPhot
               src={optimizedImageUrl(photo.cloudinary_url, { width: 128 })}
               alt={photo.title}
               fill
-              className="object-cover"
+              className="pointer-events-none object-cover"
+              draggable={false}
             />
           </div>
 
